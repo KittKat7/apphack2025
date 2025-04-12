@@ -1,5 +1,6 @@
+from gameobject import GameObject
 
-class Entity:
+class Entity(GameObject):
     def __init__(self) -> None:
         speed: float
         stamina: float
