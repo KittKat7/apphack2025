@@ -100,3 +100,18 @@ class World:
             else:
                 #???
                 return
+    
+    def percieve(self, entity: Entity) -> list[list[GameObject]]:
+        x, y = self.gameObjects[entity]
+        range = round(Entity.maxPerception * entity.perceive)
+
+        retData: list[list[GameObject]] = []
+        for i in range(0 - range/2, 0 + range / 2):
+            tmp = []
+            for j in range(0 - range/2, 0 + range / 2):
+                if x + i < 0 or x + i >= self.width or y + j < 0 or y + j >= self.height:
+                    continue
+                tmp.append(self.worldMap[x + i][y + j])
+            retData.append(tmp)
+        return retData
+
