@@ -125,13 +125,19 @@ class World:
                 return
     
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
-        # For consuming food
+        print("move", pos)
         ex, ey = self.gameObjects[ent]
-        if(self.worldMap[ex + pos[0]][ey + pos[1]] is Food):
-            self.worldMap[ex][ey] = None
+        try:
+            self.worldMap[ex + pos[0]][ey + pos[1]]
+        except:
+            print("EX")
+            return
+        # For consuming food
+        if isinstance(self.worldMap[ex + pos[0]][ey + pos[1]], Food):
+            self.worldMap[ex + pos[0]][ey + pos[1]] = None
             ent.energy += World.FOOD_ENERGY
         # Move entity
-        if(self.worldMap[ex + pos[0]][ey + pos[1]] == None):
+        if self.worldMap[ex + pos[0]][ey + pos[1]] == None:
             self.worldMap[ex + pos[0]][ey + pos[1]] = ent
             self.worldMap[ex][ey] = None
             self.gameObjects[ent] = (ex + pos[0], ey + pos[1])

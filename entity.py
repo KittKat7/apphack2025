@@ -154,6 +154,7 @@ class Entity(GameObject):
                     moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
 
             self.move(self, (moveX, moveY))
+
                 
             
         else: #moves randomly
@@ -184,4 +185,7 @@ class Entity(GameObject):
                 self.move(self, (-1, 1))
             else:
                 #should never reach
-                return
+                """"""
+                # return
+        
+        print(run, chase, gettingFood)
