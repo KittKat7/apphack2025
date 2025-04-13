@@ -55,7 +55,7 @@ class World:
                     if e.energy > 25:
                         self.reproduce(e)
                         e.energy -= 20
-                    time.sleep(1)
+                    time.sleep(0.1)
                 if e.energy <= 0:
                     self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
                     self.gameObjects.pop(e)
@@ -149,7 +149,6 @@ class World:
                 return
     
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
-        print(pos)
         ex, ey = self.gameObjects[ent]
         pos = (pos[0], pos[1])
         try:
