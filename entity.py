@@ -81,4 +81,5 @@ class Entity(GameObject):
         elif gettingFood:
             pass #TODO
         else: #moves randomly
+            pass
         
