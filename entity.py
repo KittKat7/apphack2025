@@ -2,6 +2,7 @@ from gameobject import GameObject
 from gameobject import Food
 import random
 import math
+import time
 
 class Entity(GameObject):
     maxPerception:int = 5
@@ -143,12 +144,13 @@ class Entity(GameObject):
             self.move(self, (moveX, moveY))
                             
         elif gettingFood:
+            print(foods)
             # find closes entity
             closestFood:Food | None = None
             for food in foods:
                 if closestFood is None or (abs(foods[food][0]) + abs(foods[food][1])) / 2 < (abs(foods[closestFood][0]) + abs(foods[closestFood][1])) / 2:
                     closestFood = food
-            
+                                
             #move toward stuff
             if closestFood is not None: #should always be the case
                 if(foods[closestFood][0] == 0):
