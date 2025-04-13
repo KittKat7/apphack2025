@@ -20,7 +20,7 @@ class Entity(GameObject):
         self.move = move
         
     def think(self):
-        observableWorld:list[list[GameObject]] = self.perceive()
+        observableWorld:list[list[GameObject]] = self.perceive(self)
         
         #look for things nearby
         entities:dict[Entity, tuple[int,int]] = dict()
