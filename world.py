@@ -106,12 +106,12 @@ class World:
         survivability: float = defender.toughness / totalStats
         if((random.random() * 100) > survivability):
             attacker.energy -= attacker.strength * World.ENERGY_LOST
-            attacker.energy += defender.energy
+            attacker.energy += defender.energy + World.FOOD_ENERGY
+            self.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]] = None
             del self.gameObjects[defender]
-            self.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]]
             if(attacker.energy <= 0):
-                del self.gameObjects[defender]
-                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
+                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]] = None
+                del self.gameObjects[attacker]
                 return
             else:
                 return
@@ -144,12 +144,14 @@ class World:
             
     def percieve(self, entity: Entity) -> list[list[GameObject]]:
         x, y = self.gameObjects[entity]
-        r = round(Entity.maxPerception * entity.perception)
+        r = int(round(Entity.maxPerception * entity.perception)) + 1
 
         retData: list[list[GameObject]] = []
-        for i in range(int(0 - r / 2), int(0 + r / 2)):
+        for i in range(-r + 1, r):
+            if x + i < 0 or x + i >= self.width:
+                continue
             tmp = []
-            for j in range(int(0 - r/2), int(0 + r / 2)):
+            for j in range(-r + 1, r):
                 if x + i < 0 or x + i >= self.width or y + j < 0 or y + j >= self.height:
                     continue
                 tmp.append(self.worldMap[x + i][y + j])

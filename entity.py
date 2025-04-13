@@ -26,15 +26,16 @@ class Entity(GameObject):
         entities:dict[Entity, tuple[int,int]] = dict()
         foods:dict[Food, tuple[int,int]] = dict()
         gameObjects:dict[GameObject, tuple[int,int]] = dict()
-        obsWrldHeight:int = len(observableWorld)
-        obsWrldWidth:int = len(observableWorld[0])
+        obsWrldWidth:int = len(observableWorld)
+        obsWrldHeight:int = len(observableWorld[0])
         
         rawPerception:int = round(self.perception*self.maxPerception)
         
-        #find nearby things [..., self, ....]
+        print(observableWorld)
+        #find nearby things [..., self, ....(
         for i in range(0,obsWrldWidth):
             for j in range(0,obsWrldHeight):
-                if(i < 0 or i >= obsWrldHeight or j < 0 or j >= obsWrldWidth): # bounds checking
+                if i < 0 or i >= obsWrldWidth or j < 0 or j >= obsWrldHeight: # bounds checking
                     continue
                 tmp = observableWorld[i][j]
                 if isinstance(tmp, Entity):
