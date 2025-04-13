@@ -1,3 +1,4 @@
+from typing import Callable
 from gameobject import GameObject
 from gameobject import Food
 from entity import Entity
@@ -43,7 +44,7 @@ class World:
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve) -> Entity:
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: Callable[[], list[list[GameObject]]]) -> Entity:
         return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve)
     
     def makeFood(self) -> Food:
