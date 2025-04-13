@@ -4,10 +4,10 @@ from entity import Entity
 
 class World:
 
-    self.worldMap: list[list[GameObject]]
+    worldMap: list[list[GameObject]]
 
     def __init__(self, ) -> None:
-        self.gameObjects: dict[Entity, tuple(int, int)]
+        self.gameObjects: dict[GameObject, tuple[int, int]]
         self.width: int
         self.height: int
         self.foodGrowthRate: float
@@ -43,3 +43,7 @@ class World:
     
     def makeFood() -> Food:
         return Food()
+
+    def getGameObjectPos(self, obj: GameObject) -> tuple[int, int]:
+        return self.gameObjects.get(obj)
+    
