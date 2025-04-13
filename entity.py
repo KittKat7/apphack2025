@@ -115,9 +115,15 @@ class Entity(GameObject):
             
             #move toward stuff
             if closestEntity is not None: #should always be the case
-                moveX = round(entities[closestEntity][0]/abs(entities[closestEntity][0])) #use abs to prevent -*-=+
-                moveY = round(entities[closestEntity][1]/abs(entities[closestEntity][1])) #use abs to prevent -*-=+
-                self.move(self, (moveX, moveY))
+                if(entities[closestEntity][0] == 0):
+                    moveX = 0
+                else:
+                    moveX = round(entities[closestEntity][0]/abs(entities[closestEntity][0])) #use abs to prevent -*-=+
+                
+                if(entities[closestEntity][1] == 0):
+                    moveY = 0
+                else:
+                    moveY = round(entities[closestEntity][1]/abs(entities[closestEntity][1])) #use abs to prevent -*-=+
                             
         elif gettingFood:
             # find closes entity
@@ -128,8 +134,17 @@ class Entity(GameObject):
             
             #move toward stuff
             if closestFood is not None: #should always be the case
-                moveX = round(foods[closestFood][0]/abs(foods[closestFood][0])) #use abs to prevent -*-=+
-                moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
+                if(foods[closestFood][0] == 0):
+                    moveX = 0
+                else:
+                    moveX = round(foods[closestFood][0]/abs(foods[closestFood][0])) #use abs to prevent -*-=+
+                
+                if(foods[closestFood][1] == 0):
+                    moveY = 0
+                else:
+                    moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
+
+                
                 self.move(self, (moveX, moveY))
                 
             
