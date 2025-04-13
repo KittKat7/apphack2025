@@ -3,6 +3,7 @@ from gameobject import Food
 
 class Entity(GameObject):
     maxPerception:int = 5
+    maxTileMovement:int = 3
     
     def __init__(self, speed:float, stamina:float, perception:float, strength:float, toughness:float, lifespan:float, energy:float, perceive, attack, move) -> None:
         self.speed: float = speed
@@ -88,8 +89,8 @@ class Entity(GameObject):
                     moveY = moveY - entities[entity][1] #negative because moving away
                     hostileEntities = hostileEntities + 1
             
-            moveXavg = round(moveX/hostileEntities)
-            moveYavg = round(moveY/hostileEntities)
+            moveXavg = round((moveX/hostileEntities)*self.speed + self.maxTileMovement*self.speed)
+            moveYavg = round((moveY/hostileEntities)*self.speed + self.maxTileMovement*self.speed)        
             
             self.move(self, (moveXavg, moveYavg))    
 
@@ -99,6 +100,10 @@ class Entity(GameObject):
             for entity in entities:
                 if closestEntity is None or (entities[entity][0] + entities[entity][1]) < (entities[closestEntity][0] + entities[closestEntity][1]):
                     closestEntity = entity
+            
+            if closestEntity is not None: #should always be the case
+                moveX = round(entities[closestEntity][0])
+                moveY = round(entities[closestEntity][0])
             
         elif gettingFood:
             pass #TODO
