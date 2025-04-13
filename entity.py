@@ -120,7 +120,19 @@ class Entity(GameObject):
                 self.move(self, (moveX, moveY))
                             
         elif gettingFood:
-            pass #TODO
+            # find closes entity
+            closestFood:Food | None = None
+            for food in foods:
+                if closestFood is None or (foods[food][0] + foods[food][1]) < (foods[closestFood][0] + foods[closestFood][1]):
+                    closestFood = food
+            
+            #move toward stuff
+            if closestFood is not None: #should always be the case
+                moveX = round(foods[closestFood][0]/abs(foods[closestFood][0])) #use abs to prevent -*-=+
+                moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
+                self.move(self, (moveX, moveY))
+                
+            
         else: #moves randomly
             direction: int = random.randint(1, 8)
             if(direction == 1):
@@ -150,4 +162,3 @@ class Entity(GameObject):
             else:
                 #should never reach
                 return
-            pass #TODO
