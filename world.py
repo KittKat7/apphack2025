@@ -1,10 +1,12 @@
 from gameobject import GameObject
 from gameobject import Food
 from entity import Entity
+import random
 
 class World:
 
     worldMap: list[list[GameObject]]
+    ENERGY_LOST: 10
 
     def __init__(self, ) -> None:
         self.gameObjects: dict[GameObject, tuple[int, int]]
@@ -47,3 +49,31 @@ class World:
     def getGameObjectPos(self, obj: GameObject) -> tuple[int, int]:
         return self.gameObjects.get(obj)
     
+    def handleAttack(self, attacker: Entity, defender: Entity) -> None:
+        totalStats: float = attacker.strength + defender.toughness
+        survivability: float = defender.toughness / totalStats
+        if((random.random() * 100) > survivability):
+            attacker.energy -= attacker.strength * World.ENERGY_LOST
+            attacker.energy += defender.energy
+            self.gameObjects.remove(defender)
+            World.worldMap.remove(defender)
+            if(attacker.energy <= 0):
+                self.gameObjects.remove(attacker)
+                World.worldMap.remove(attacker)
+                return
+            else:
+                return
+        else:
+            attacker.energy -= attacker.strength * World.ENERGY_LOST
+            if(attacker.energy <= 0):
+                self.gameObjects.remove(attacker)
+                World.worldMap.remove(attacker)
+                return
+            else:
+                return
+    """
+    def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
+        if(World.worldMap[self.gameObjects.get(ent).][]
+        self.gameObjects.insert(ent, pos)
+        World.worldMap.insert(ent, pos)
+    """    
