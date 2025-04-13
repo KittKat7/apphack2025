@@ -3,6 +3,7 @@ if __name__ == "__main__":
     exit()
 
 import pygame as pg
+import threading
 
 from gameobject import Food, GameObject
 import gameobject
@@ -83,9 +84,10 @@ class MenuScreen(Screen):
         """
         """
         self.titleText = Text(0, 0, 0, 0, None, "EVO SIM")
-        self.startButton = Button(0, 0, 500, 100, lambda : display.setScreen(SimScreen(display, World())), buttonText="START")
+        self.startButton = Button(0, 0, 500, 100, self.startGame, buttonText="START")
         self.quitButton = Button(0, 0, 500, 100, quit, buttonText="QUIT")
         self.widgets = [self.titleText, self.startButton, self.quitButton]
+        self.display = display
     
     def render(self, screen, scale):
         w, h = pg.display.get_surface().get_size()
@@ -104,6 +106,13 @@ class MenuScreen(Screen):
             mouse = pg.mouse.get_pos()
             for w in self.widgets:
                 w.event(event)
+    
+    def startGame(self):
+        world: World = World()
+        self.display.setScreen(SimScreen(self.display, world))
+        t = threading.Thread(target=world.run)
+        t.start()
+        print("BEEP")
 
 class SimSettingScreen(Screen):
     # TODO

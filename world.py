@@ -3,6 +3,7 @@ from gameobject import GameObject
 from gameobject import Food
 from entity import Entity
 import random
+import time
 
 DEFAULTWIDTH = 25
 DEFAULTHEIGHT = 25
@@ -14,15 +15,55 @@ class World:
 
     def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
         self.worldMap: list[list[Union[GameObject, None]]] = []
-        self.gameObjects: dict[GameObject, tuple[int, int]]
+        self.gameObjects: dict[GameObject, tuple[int, int]] = {}
         self.width: int = width
         self.height: int = height
-        self.foodGrowthRate: float
+        self.foodGrowthRate: float = 10
         self.foodQuality: int
         self.geneRandomness: float
 
+        self.running = True
+
         for i in range(width):
             self.worldMap.append([None] * height)
+
+        for i in range(int(self.foodGrowthRate)):
+            x = random.randrange(0, self.width, 1)
+            y = random.randrange(0, self.height, 1)
+            if self.worldMap[x][y] == None:
+                e = Entity(random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), self.percieve, self.handleAttack, self.handleMove)
+                self.worldMap[x][y] = e
+                self.gameObjects[e] = (x, y)
+        self.genFood()
+
+
+    def run(self):
+        while self.running:
+            entities = list(self.gameObjects.keys())
+            if len(entities) == 0:
+                self.running = False
+
+            for e in entities: # type: ignore
+                e: Entity = e
+                turns = 5 * e.speed
+                for i in range(int(turns)):
+                    e.think()
+                    time.sleep(0.1)
+                    print("b")
+                if e.energy <= 0:
+                    self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
+                    self.gameObjects.pop(e)
+            self.genFood()
+
+    def genFood(self):
+        for i in range(int(self.foodGrowthRate * 10)):
+            x = random.randrange(0, self.width, 1)
+            y = random.randrange(0, self.height, 1)
+            if self.worldMap[x][y] == None:
+                self.worldMap[x][y] = Food()
+            elif isinstance(self.worldMap[x][y], Entity):
+                self.worldMap[x][y].energy += World.FOOD_ENERGY # type: ignore
+
 
     def getWidth(self) -> int:
         return self.width
@@ -103,12 +144,12 @@ class World:
             
     def percieve(self, entity: Entity) -> list[list[GameObject]]:
         x, y = self.gameObjects[entity]
-        range = round(Entity.maxPerception * entity.perceive)
+        r = round(Entity.maxPerception * entity.perception)
 
         retData: list[list[GameObject]] = []
-        for i in range(0 - range/2, 0 + range / 2):
+        for i in range(int(0 - r / 2), int(0 + r / 2)):
             tmp = []
-            for j in range(0 - range/2, 0 + range / 2):
+            for j in range(int(0 - r/2), int(0 + r / 2)):
                 if x + i < 0 or x + i >= self.width or y + j < 0 or y + j >= self.height:
                     continue
                 tmp.append(self.worldMap[x + i][y + j])
