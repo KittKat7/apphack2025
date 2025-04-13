@@ -5,6 +5,7 @@ if __name__ == "__main__":
 import pygame as pg
 
 from widgets import *
+from world import World
 
 WIDTH = 360
 HEIGHT = 480
@@ -17,7 +18,6 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-
 class Display:
     def __init__(self) -> None:
         """
@@ -28,7 +28,7 @@ class Display:
         self.pgscreen: pg.Surface = pg.display.set_mode((0, 0), pg.RESIZABLE)
         pg.display.set_caption("EVO SIM")
         self.clock: pg.Clock = pg.time.Clock() # type: ignore
-        self.screen = MenuScreen()
+        self.screen = MenuScreen(self)
         
 
     def run(self):
@@ -55,24 +55,33 @@ class Display:
             self.screen.render(self.pgscreen, self.scale)
             pg.display.flip()
             pg.display.update()
+
+    def setScreen(self, screen) -> None:
+        self.screen = screen
+
         
 class Screen:
-    def __init__(self) -> None:
+    def __init__(self, display: Display) -> None:
         """
         """
+        self.display: Display = display
         self.widgets = list[Widget]
 
     @abstractmethod
     def render(self, screen, scale):
         pass
+
+    @abstractmethod
+    def event(self, event):
+        pass
     
 
 class MenuScreen(Screen):
-    def __init__(self) -> None:
+    def __init__(self, display: Display) -> None:
         """
         """
         self.titleText = Text(0, 0, 0, 0, None, "EVO SIM")
-        self.startButton = Button(0, 0, 500, 100, lambda : print("hello"), buttonText="START")
+        self.startButton = Button(0, 0, 500, 100, lambda : display.setScreen(SimScreen(display, World())), buttonText="START")
         self.quitButton = Button(0, 0, 500, 100, quit, buttonText="QUIT")
         self.widgets = [self.titleText, self.startButton, self.quitButton]
     
@@ -99,12 +108,14 @@ class SimSettingScreen(Screen):
     pass
 
 class SimScreen(Screen):
-    def __init__(self, world) -> None:
+    def __init__(self, display: Display, world: World) -> None:
         worldW = world.getWidth()
         worldH = world.getHeight()
-        for i in range(worldW):
 
-            w, h = pg.display.get_surface().get_size()
-            pass
+    def render(self, screen, scale):
+        w, h = pg.display.get_surface().get_size()
+
+        pg.draw.rect(screen, '#000000', [w - w * 0.20, 0, w * 0.20, h])
+        return super().render(screen, scale)
 
 
