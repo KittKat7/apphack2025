@@ -8,6 +8,7 @@ import pygame as pg
 
 from entity import Entity
 from gameobject import GameObject
+from world import World
 
 widgetFont: pg.font.Font
 
@@ -132,8 +133,14 @@ class EntityWidget(Widget):
     def render(self, screen, scale):
         self.width = self.initWidth * scale
         self.height = self.initHeight * scale
-# image.set_alpha(128)
-        screen.blit(pg.transform.scale(EntityWidget.entityImage, (self.width, self.height)), (self.x, self.y)) # type: ignore
+        en = pg.transform.scale(EntityWidget.entityImage, (self.width, self.height)) # type: ignore
+        r = 0
+        g = max(min(int(255 * 0.2 * (self.entity.energy/World.MAX_ENERGY)), 255), 0)
+        b = max(min(int(255 * 0.9 * (self.entity.energy/World.MAX_ENERGY)), 255), 0)
+        c = pg.Color(r, g, b)
+
+        en.fill(c, special_flags=pg.BLEND_RGBA_MULT)
+        screen.blit(en, (self.x, self.y)) # type: ignore
 
         life = pg.transform.scale(EntityWidget.lifeImage, (self.width, self.height)) # type: ignore
         life.set_alpha(128 * self.entity.lifespan) # type: ignore

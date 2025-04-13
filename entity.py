@@ -18,6 +18,14 @@ class Entity(GameObject):
         self.perceive = perceive
         self.attack = attack
         self.move = move
+
+    def rand(self):
+        self.speed += (random.randrange(-10, 10, 1) / 100)
+        self.stamina += (random.randrange(-10, 10, 1) / 100)
+        self.perception += (random.randrange(-10, 10, 1) / 100)
+        self.strength += (random.randrange(-10, 10, 1) / 100)
+        self.toughness += (random.randrange(-10, 10, 1) / 100)
+        self.lifespan += (random.randrange(-10, 10, 1) / 100)
         
     def think(self):
         observableWorld:list[list[GameObject]] = self.perceive(self)
@@ -65,7 +73,7 @@ class Entity(GameObject):
                 gettingFood = False
                 movingRandomly = False
                 break #don't need to check anymore if running
-            elif entity.toughness <= self.strength and not run:
+            elif entity.toughness < self.strength and not run:
                 chase = True 
                 gettingFood = False
                 movingRandomly = False
