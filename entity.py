@@ -95,10 +95,11 @@ class Entity(GameObject):
 
         elif chase:
             # find closes entity
-            closestEntity:Entity
+            closestEntity:Entity | None = None
             for entity in entities:
-                # if entity is None or 
-                pass
+                if closestEntity is None or (entities[entity][0] + entities[entity][1]) < (entities[closestEntity][0] + entities[closestEntity][1]):
+                    closestEntity = entity
+            
         elif gettingFood:
             pass #TODO
         else: #moves randomly
