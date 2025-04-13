@@ -1,10 +1,10 @@
 from gameobject import GameObject
 from gameobject import Food
 
-maxPerception:int = 5
 class Entity(GameObject):
+    maxPerception:int = 5
     
-    def __init__(self, speed:float, stamina:float, perception:float, strength:float, toughness:float, lifespan:float, energy:float, perceive) -> None:
+    def __init__(self, speed:float, stamina:float, perception:float, strength:float, toughness:float, lifespan:float, energy:float, perceive, attack, move) -> None:
         self.speed: float = speed
         self.stamina: float = stamina
         self.perception: float = perception # used by world to figure out the return function
@@ -13,6 +13,8 @@ class Entity(GameObject):
         self.lifespan: float = lifespan
         self.energy: float = energy#main balancing factor of sim, start off with full energy
         self.perceive = perceive
+        self.attack = attack
+        self.move = move
         
     def think(self):
         observableWorld:list[list[GameObject]] = self.perceive()
@@ -24,7 +26,7 @@ class Entity(GameObject):
         obsWrldHeight:int = len(observableWorld)
         obsWrldWidth:int = len(observableWorld[0])
         
-        rawPerception:int = round(self.perception*maxPerception)
+        rawPerception:int = round(self.perception*self.maxPerception)
         
         #find nearby things [..., self, ....]
         for i in range(0,rawPerception+1+rawPerception):
@@ -89,11 +91,14 @@ class Entity(GameObject):
             moveXavg = round(moveX/hostileEntities)
             moveYavg = round(moveY/hostileEntities)
             
-           
-            
+            self.move(self, (moveXavg, moveYavg))    
 
         elif chase:
-            pass #TODO
+            # find closes entity
+            closestEntity:Entity
+            for entity in entities:
+                # if entity is None or 
+                pass
         elif gettingFood:
             pass #TODO
         else: #moves randomly
