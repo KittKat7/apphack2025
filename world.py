@@ -11,7 +11,7 @@ DEFAULTHEIGHT = 15
 class World:
 
     ENERGY_LOST: int = 10
-    FOOD_ENERGY: int = 5
+    FOOD_ENERGY: int = 7
     MAX_ENERGY: int = 30
 
     def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
@@ -49,13 +49,14 @@ class World:
                 if e.energy > World.MAX_ENERGY:
                     e.energy = World.MAX_ENERGY
                 turns = 5 * e.speed
-                e.energy -= 1
+                e.energy -= 2
                 for i in range(int(turns)):
+                    # e.energy -= 2 * (100 - e.stamina) * (random.randrange(8, 11, 1) / 10)
                     e.think()
                     if e.energy > 25:
                         self.reproduce(e)
                         e.energy -= 20
-                    time.sleep(0.1)
+                    time.sleep(0.01)
                 if e.energy <= 0:
                     self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
                     self.gameObjects.pop(e)
@@ -125,6 +126,8 @@ class World:
             return None
     
     def handleAttack(self, attacker: Entity, defender: Entity) -> None:
+        attacker.energy -= 5
+        return
         totalStats: float = attacker.strength + defender.toughness
         survivability: float = defender.toughness / totalStats
         if((random.random() * 100) > survivability):
