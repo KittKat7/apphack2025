@@ -29,8 +29,8 @@ class World:
     def getGeneRandomness(self) -> float:
         return self.geneRandomness
     
-    def makeEntity(speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float: energy: float) -> Entity:
-        return Entity
+    def makeEntity(speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float) -> Entity:
+        return Entity()
     
     def makeFood() -> Food:
-        
+        return Food()
