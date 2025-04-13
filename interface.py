@@ -4,6 +4,7 @@ if __name__ == "__main__":
 
 import pygame as pg
 
+from gameobject import Food, GameObject
 from widgets import *
 from world import World
 
@@ -109,13 +110,45 @@ class SimSettingScreen(Screen):
 
 class SimScreen(Screen):
     def __init__(self, display: Display, world: World) -> None:
-        worldW = world.getWidth()
-        worldH = world.getHeight()
+        self.world: World = world
+        self.worldW: int = world.getWidth()
+        self.worldH: int = world.getHeight()
 
     def render(self, screen, scale):
         w, h = pg.display.get_surface().get_size()
+        scalew: float = (w * 0.8) / self.worldW
+        scaleh: float = h / self.worldH
+        scaleTile: float = scalew
+        if scaleh < scalew:
+            scaleTile = scaleh
+        
+        drawW = scaleTile * self.worldW
+        drawH = scaleTile * self.worldH
 
-        pg.draw.rect(screen, '#000000', [w - w * 0.20, 0, w * 0.20, h])
-        return super().render(screen, scale)
+        startx = w * 0.8 / 2 - drawW / 2
+        starty = h / 2 - drawW / 2
+
+        screen.fill('#000000')
+
+        pg.draw.rect(screen, '#333333', [startx, starty, drawW, drawH])
+        for i in range(self.worldW):
+            for j in range(self.worldH):
+                # pg.draw.rect(screen, '#333333', [
+                #     i * scaleTile + startx,
+                #     j * scaleTile + starty,
+                #     scaleTile,
+                #     scaleTile])
+                pg.draw.rect(screen, '#007744', [
+                    i * scaleTile + 1 * scale + startx,
+                    j * scaleTile + 1 * scale + starty,
+                    scaleTile - 2 * scale,
+                    scaleTile - 2 * scale])
+            
+                if self.world.worldMap[i][j] is GameObject:
+                    if self.world.worldMap[i][j] is Food:
+                        FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile)).render(screen, scale)
+
+
+        pg.draw.rect(screen, '#AAAAAA', [w - w * 0.20, 0, w * 0.20, h])
 
 
