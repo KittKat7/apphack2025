@@ -1,4 +1,4 @@
-import game as Game
+import world as World
 class GameObject:
     """
     """ 
@@ -9,7 +9,7 @@ class GameObject:
         self.y:int = y
     
     def getPos(self)->tuple[int, int]:
-        x, y = Game.getGameObjectPos(self)
+        x, y = World.getGameObjectPos(self)
         self.x = x
         self.y = y
         return (x,y)        
