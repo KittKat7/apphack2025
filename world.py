@@ -10,6 +10,7 @@ DEFAULTHEIGHT = 25
 class World:
 
     ENERGY_LOST: int = 10
+    FOOD_ENERGY: int = 10
 
     def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
         self.worldMap: list[list[Union[GameObject, None]]] = []
@@ -86,7 +87,7 @@ class World:
         # For consuming food
         if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] is Food):
             self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = None
-            ent.energy += 10 # TODO
+            ent.energy += World.FOOD_ENERGY
         # Move entity
         if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
             self.gameObjects[ent] = (self.gameObjects[ent][0] + pos[0], self.gameObjects[ent][1] + pos[1])
