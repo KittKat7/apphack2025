@@ -77,7 +77,7 @@ class Entity(GameObject):
                     
         if not run and not chase and not gettingFood: #redundant check 
             movingRandomly = True     
-            
+        print(run, chase, gettingFood, movingRandomly)    
         
         moveX:int = 0
         moveY:int = 0
@@ -154,7 +154,6 @@ class Entity(GameObject):
                     moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
 
             self.move(self, (moveX, moveY))
-
                 
             
         else: #moves randomly
@@ -185,7 +184,4 @@ class Entity(GameObject):
                 self.move(self, (-1, 1))
             else:
                 #should never reach
-                """"""
-                # return
-        
-        print(run, chase, gettingFood)
+                return
