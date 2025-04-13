@@ -32,10 +32,12 @@ class Entity(GameObject):
         
         #look for things nearby
         entities:dict[Entity, tuple[int,int]] = dict()
-        foods:dict[Food, tuple[int,int]] = dict()
+        foods:dict[Food, tuple[int,int]] = {}
         gameObjects:dict[GameObject, tuple[int,int]] = dict()
         obsWrldWidth:int = len(observableWorld)
         obsWrldHeight:int = len(observableWorld[0])
+        cx = round(obsWrldWidth / 2)
+        cy = round(obsWrldHeight / 2)
         
         rawPerception:int = round(self.perception*self.maxPerception)
         
@@ -49,13 +51,11 @@ class Entity(GameObject):
                     entities.update({tmp:(i,j)})
                     gameObjects.update({tmp:(i,j)})
                 elif isinstance(tmp, Food):
-                    foods.update({tmp:(i,j)})
+                    foods[tmp] = (i - cx, j - cy)
                     gameObjects.update({tmp:(i,j)})
                 else:
                     pass #don't care abt empty spaces
              
-        print(foods)
-                
         #Decide which of the following scenarios are happening
             #first priority is surviving so if you see something with strength greater than your toughness run
             #second priority is eating things with a lower toughness, than your strength
@@ -86,7 +86,6 @@ class Entity(GameObject):
                     
         if not run and not chase and not gettingFood: #redundant check 
             movingRandomly = True     
-        print(run, chase, gettingFood, movingRandomly)    
         
         moveX:int = 0
         moveY:int = 0
@@ -147,7 +146,7 @@ class Entity(GameObject):
             # find closes entity
             closestFood:Food | None = None
             for food in foods:
-                if closestFood is None or (foods[food][0] + foods[food][1]) < (foods[closestFood][0] + foods[closestFood][1]):
+                if closestFood is None or (abs(foods[food][0]) + abs(foods[food][1])) / 2 < (abs(foods[closestFood][0]) + abs(foods[closestFood][1])) / 2:
                     closestFood = food
             
             #move toward stuff
@@ -155,16 +154,21 @@ class Entity(GameObject):
                 if(foods[closestFood][0] == 0):
                     moveX = 0
                 else:
-                    moveX = round(foods[closestFood][0]/abs(foods[closestFood][0])) #use abs to prevent -*-=+
+                    if foods[closestFood][0] < 0:
+                        moveX = -1
+                    else:
+                        moveX = 1
                 
                 if(foods[closestFood][1] == 0):
                     moveY = 0
                 else:
-                    moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
+                    if foods[closestFood][1] < 0:
+                        moveY = -1
+                    else:
+                        moveY = 1
 
-                print(foods[closestFood])
-                print(moveX, moveY)
             self.move(self, (moveX, moveY))
+            return
                 
             
         else: #moves randomly
