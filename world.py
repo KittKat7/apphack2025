@@ -3,15 +3,18 @@ from gameobject import Food
 from entity import Entity
 import random
 
+DEFAULTWIDTH = 100
+DEFAULTHEIGHT = 100
+
 class World:
 
     worldMap: list[list[GameObject]]
     ENERGY_LOST: int = 10
 
-    def __init__(self, ) -> None:
+    def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
         self.gameObjects: dict[GameObject, tuple[int, int]]
-        self.width: int
-        self.height: int
+        self.width: int = width
+        self.height: int = height
         self.foodGrowthRate: float
         self.foodQuality: int
         self.geneRandomness: float
