@@ -82,7 +82,7 @@ class World:
                     g = self.worldMap[x + i - 1][y + j - 1]
                     if g == None:
                         self.worldMap[x + i - 1][y + j -1] = Entity(entity.speed, entity.stamina, entity.perception, entity.toughness, entity.toughness, entity.lifespan, 20, entity.perceive, entity.attack, entity.move)
-                        self.worldMap[x + i - 1][y + j -1].rand() # type: ignore
+                        self.worldMap[x + i - 1][y + j -1].rand()
                         self.gameObjects[self.worldMap[x + i - 1][y + j - 1]] = (x + i - 1, y + j - 1) # type: ignore
                         return
                 except:
@@ -153,7 +153,6 @@ class World:
     
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
         ex, ey = self.gameObjects[ent]
-        pos = (pos[0], pos[1])
         try:
             self.worldMap[ex + pos[0]][ey + pos[1]]
         except:
@@ -189,5 +188,5 @@ class World:
                 else:
                     tmp.append(self.worldMap[x + i][y + j])
             retData.append(tmp)
-        # print(retData)
+        print(retData)
         return retData

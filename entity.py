@@ -49,7 +49,7 @@ class Entity(GameObject):
                     continue
                 tmp = observableWorld[i][j]
                 if isinstance(tmp, Entity):
-                    entities.update({tmp:(i,j)})
+                    entities[tmp] = (i - cx, j - cy)
                     gameObjects.update({tmp:(i,j)})
                 elif isinstance(tmp, Food):
                     foods[tmp] = (i - cx, j - cy)
@@ -122,7 +122,7 @@ class Entity(GameObject):
             # find closes entity
             closestEntity:Entity | None = None
             for entity in entities:
-                if closestEntity is None or (entities[entity][0] + entities[entity][1]) < (entities[closestEntity][0] + entities[closestEntity][1]):
+                if closestEntity is None or (abs(entities[entity][0]) + abs(entities[entity][1])) / 2 < (abs(entities[closestEntity][0]) + abs(entities[closestEntity][1])) / 2:
                     closestEntity = entity
             
             #if in the 8 adjecent tiles then attack
