@@ -92,11 +92,18 @@ class Entity(GameObject):
                     moveY = moveY - entities[entity][1] #negative because moving away
                     hostileEntities = hostileEntities + 1
             
-            moveXavg = moveX/hostileEntities
-            moveYavg = moveY/hostileEntities
+            moveXavg = moveX/hostileEntities #hostilesentitites should never be 0
+            moveYavg = moveY/hostileEntities #hostilesentitites should never be 0
                         
-            normalizedX = moveXavg/abs(moveXavg) #use abs to prevent -*-=+
-            normalizedY = moveYavg/abs(moveXavg) #use abs to prevent -*-=+
+            if(moveXavg == 0):
+                normalizedX = 0
+            else:
+                normalizedX = moveXavg/abs(moveXavg) #use abs to prevent -*-=+
+                
+            if(moveYavg == 0):
+                normalizedY = 0
+            else:
+                normalizedY = moveYavg/abs(moveYavg) #use abs to prevent -*-=+
             
             discretizedNormalizedX = round(normalizedX)
             discretizedNormalizedY = round(normalizedY)
