@@ -3,8 +3,8 @@ from gameobject import Food
 from entity import Entity
 import random
 
-DEFAULTWIDTH = 100
-DEFAULTHEIGHT = 100
+DEFAULTWIDTH = 10
+DEFAULTHEIGHT = 10
 
 class World:
 
