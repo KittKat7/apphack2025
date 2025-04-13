@@ -1,3 +1,4 @@
+from typing import Callable
 from gameobject import GameObject
 from gameobject import Food
 from entity import Entity
@@ -43,7 +44,7 @@ class World:
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve) -> Entity:
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: Callable[[], list[list[GameObject]]]) -> Entity:
         return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve)
     
     def makeFood(self) -> Food:
@@ -77,9 +78,20 @@ class World:
                 return
             else:
                 return
-    """
+    
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
-        if(World.worldMap[self.gameObjects.get(ent).][]
-        self.gameObjects.insert(ent, pos)
-        World.worldMap.insert(ent, pos)
-    """    
+        if(World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
+            self.gameObjects[ent] = (self.gameObjects[ent][0] + pos[0], self.gameObjects[ent][1] + pos[1])
+            World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = ent
+        else:
+            objAtLocation = World.worldMap[self.gameObjects[ent][0] + pos[0]][self.gameObjects[ent][1] + pos[1]]
+            if(isinstance(objAtLocation, Entity)):    
+                self.handleAttack(ent, objAtLocation)
+                return
+            elif(isinstance(objAtLocation, Food)):
+                #consume food
+                return
+            else:
+                #???
+                return
+    
