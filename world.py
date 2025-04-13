@@ -48,8 +48,8 @@ class World:
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: Callable[[], list[list[GameObject]]]) -> Entity:
-        return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve)
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: Callable[[], list[list[GameObject]]], attack: Callable[[Entity, Entity], None], move: Callable[[Entity, tuple[int, int]], None]) -> Entity:
+        return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve, attack, move)
     
     def makeFood(self) -> Food:
         return Food()
@@ -100,7 +100,7 @@ class World:
             else:
                 #???
                 return
-    
+            
     def percieve(self, entity: Entity) -> list[list[GameObject]]:
         x, y = self.gameObjects[entity]
         range = round(Entity.maxPerception * entity.perceive)
@@ -114,4 +114,3 @@ class World:
                 tmp.append(self.worldMap[x + i][y + j])
             retData.append(tmp)
         return retData
-
