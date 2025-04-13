@@ -188,5 +188,4 @@ class World:
                 else:
                     tmp.append(self.worldMap[x + i][y + j])
             retData.append(tmp)
-        print(retData)
         return retData
