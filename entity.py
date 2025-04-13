@@ -144,7 +144,6 @@ class Entity(GameObject):
             self.move(self, (moveX, moveY))
                             
         elif gettingFood:
-            print(foods)
             # find closes entity
             closestFood:Food | None = None
             for food in foods:

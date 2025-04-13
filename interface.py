@@ -112,7 +112,6 @@ class MenuScreen(Screen):
         self.display.setScreen(SimScreen(self.display, world))
         t = threading.Thread(target=world.run)
         t.start()
-        print("BEEP")
 
 class SimSettingScreen(Screen):
     # TODO
