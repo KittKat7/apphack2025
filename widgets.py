@@ -1,3 +1,7 @@
+if __name__ == "__main__":
+    import main
+    exit()
+
 from abc import ABC, abstractmethod
 import pygame as pg
 
@@ -39,7 +43,7 @@ class Text(Widget):
         self.width = width
         self.initHeight = height
         self.height = height
-        self.onclickFunction = onClickFunction
+        self.onClickFunction = onClickFunction
         self.text = text
 
     def render(self, screen, scale):
@@ -51,14 +55,14 @@ class Text(Widget):
         screen.blit(textSurface, (self.x, self.y))
 
 class Button(Widget):
-    def __init__(self, x, y, width, height, onclickFunction, buttonText='Button', onePress=False):
+    def __init__(self, x, y, width, height, onClickFunction, buttonText='Button', onePress=False):
         self.x = x
         self.y = y
         self.initWidth = width
         self.width = width
         self.initHeight = height
         self.height = height
-        self.onclickFunction = onclickFunction
+        self.onClickFunction = onClickFunction
         self.onePress = onePress
         self.alreadyPressed = False
         self.image = pg.image.load("./assets/button.png").convert_alpha()
@@ -92,4 +96,4 @@ class Button(Widget):
         if event.type == pg.MOUSEBUTTONDOWN:
             mouse = pg.mouse.get_pos()
             if self.isMouseHover():
-                self.onclickFunction()
+                self.onClickFunction()
