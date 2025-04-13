@@ -29,6 +29,15 @@ class World:
     def getGeneRandomness(self) -> float:
         return self.geneRandomness
     
+    def setFoodGrowthRate(self, val: float) -> None:
+        self.foodGrowthRate = val
+        
+    def setFoodQuality(self, val: float) -> None:
+        self.foodQuality = val
+        
+    def setGeneRandomness(self, val: float) -> None:
+        self.geneRandomness = val
+    
     def makeEntity(speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float) -> Entity:
         return Entity()
     
