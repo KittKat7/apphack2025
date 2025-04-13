@@ -49,7 +49,6 @@ class World:
                 for i in range(int(turns)):
                     e.think()
                     time.sleep(0.1)
-                    print("b")
                 if e.energy <= 0:
                     self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
                     self.gameObjects.pop(e)
@@ -107,35 +106,38 @@ class World:
         if((random.random() * 100) > survivability):
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             attacker.energy += defender.energy + World.FOOD_ENERGY
-            self.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]] = None
-            del self.gameObjects[defender]
+            defender.energy = -1
+            # self.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]] = None
+            # del self.gameObjects[defender]
             if(attacker.energy <= 0):
-                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]] = None
-                del self.gameObjects[attacker]
+                # self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]] = None
+                # del self.gameObjects[attacker]
                 return
             else:
                 return
         else:
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             if(attacker.energy <= 0):
-                del self.gameObjects[defender]
-                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
+                # del self.gameObjects[defender]
+                # self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
                 return
             else:
                 return
     
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
         # For consuming food
-        if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] is Food):
-            self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = None
+        ex, ey = self.gameObjects[ent]
+        if(self.worldMap[ex + pos[0]][ey + pos[1]] is Food):
+            self.worldMap[ex][ey] = None
             ent.energy += World.FOOD_ENERGY
         # Move entity
-        if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
-            self.gameObjects[ent] = (self.gameObjects[ent][0] + pos[0], self.gameObjects[ent][1] + pos[1])
-            self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = ent
+        if(self.worldMap[ex + pos[0]][ey + pos[1]] == None):
+            self.worldMap[ex + pos[0]][ey + pos[1]] = ent
+            self.worldMap[ex][ey] = None
+            self.gameObjects[ent] = (ex + pos[0], ey + pos[1])
         else:
-            objAtLocation = self.worldMap[self.gameObjects[ent][0] + pos[0]][self.gameObjects[ent][1] + pos[1]]
-            if(isinstance(objAtLocation, Entity)):    
+            objAtLocation = self.worldMap[ex + pos[0]][ey + pos[1]]
+            if(isinstance(objAtLocation, Entity)):
                 self.handleAttack(ent, objAtLocation)
                 return
             else:

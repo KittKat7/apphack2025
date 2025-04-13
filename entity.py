@@ -31,7 +31,6 @@ class Entity(GameObject):
         
         rawPerception:int = round(self.perception*self.maxPerception)
         
-        print(observableWorld)
         #find nearby things [..., self, ....(
         for i in range(0,obsWrldWidth):
             for j in range(0,obsWrldHeight):
