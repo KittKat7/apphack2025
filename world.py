@@ -78,9 +78,20 @@ class World:
                 return
             else:
                 return
-    """
+    
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
-        if(World.worldMap[self.gameObjects.get(ent).][]
-        self.gameObjects.insert(ent, pos)
-        World.worldMap.insert(ent, pos)
-    """    
+        if(World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
+            self.gameObjects[ent] = (self.gameObjects[ent][0] + pos[0], self.gameObjects[ent][1] + pos[1])
+            World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = ent
+        else:
+            objAtLocation = World.worldMap[self.gameObjects[ent][0] + pos[0]][self.gameObjects[ent][1] + pos[1]]
+            if(isinstance(objAtLocation, Entity)):    
+                self.handleAttack(ent, objAtLocation)
+                return
+            elif(isinstance(objAtLocation, Food)):
+                #consume food
+                return
+            else:
+                #???
+                return
+    
