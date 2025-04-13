@@ -40,7 +40,7 @@ class World:
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: function) -> Entity:
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve) -> Entity:
         return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve)
     
     def makeFood(self) -> Food:
