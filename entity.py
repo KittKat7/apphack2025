@@ -2,6 +2,7 @@ from gameobject import GameObject
 from gameobject import Food
 import random
 import math
+import time
 
 class Entity(GameObject):
     maxPerception:int = 5
@@ -53,8 +54,6 @@ class Entity(GameObject):
                     gameObjects.update({tmp:(i,j)})
                 else:
                     pass #don't care abt empty spaces
-             
-        print(foods)
                 
         #Decide which of the following scenarios are happening
             #first priority is surviving so if you see something with strength greater than your toughness run
@@ -144,12 +143,13 @@ class Entity(GameObject):
             self.move(self, (moveX, moveY))
                             
         elif gettingFood:
+            print(foods)
             # find closes entity
             closestFood:Food | None = None
             for food in foods:
-                if closestFood is None or (foods[food][0] + foods[food][1]) < (foods[closestFood][0] + foods[closestFood][1]):
+                if closestFood is None or (abs(foods[food][0]) + abs(foods[food][1])) < (abs(foods[closestFood][0]) + abs(foods[closestFood][1])):
                     closestFood = food
-            
+                                
             #move toward stuff
             if closestFood is not None: #should always be the case
                 if(foods[closestFood][0] == 0):
@@ -164,7 +164,8 @@ class Entity(GameObject):
 
                 print(foods[closestFood])
                 print(moveX, moveY)
-            self.move(self, (moveX, moveY))
+                
+            self.move(self, (moveY, moveX))
                 
             
         else: #moves randomly
