@@ -6,7 +6,7 @@ import random
 class World:
 
     worldMap: list[list[GameObject]]
-    ENERGY_LOST: 10
+    ENERGY_LOST: int = 10
 
     def __init__(self, ) -> None:
         self.gameObjects: dict[GameObject, tuple[int, int]]
@@ -34,20 +34,23 @@ class World:
     def setFoodGrowthRate(self, val: float) -> None:
         self.foodGrowthRate = val
         
-    def setFoodQuality(self, val: float) -> None:
+    def setFoodQuality(self, val: int) -> None:
         self.foodQuality = val
         
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float) -> Entity:
-        return Entity()
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: function) -> Entity:
+        return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve)
     
-    def makeFood() -> Food:
+    def makeFood(self) -> Food:
         return Food()
 
-    def getGameObjectPos(self, obj: GameObject) -> tuple[int, int]:
-        return self.gameObjects.get(obj)
+    def getGameObjectPos(self, obj: GameObject) -> tuple[int, int] | None:
+        if(self.gameObjects.get(obj) != None):
+            return self.gameObjects.get(obj)
+        else:
+            return None
     
     def handleAttack(self, attacker: Entity, defender: Entity) -> None:
         totalStats: float = attacker.strength + defender.toughness
@@ -55,19 +58,19 @@ class World:
         if((random.random() * 100) > survivability):
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             attacker.energy += defender.energy
-            self.gameObjects.remove(defender)
-            World.worldMap.remove(defender)
+            del self.gameObjects[defender]
+            World.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]]
             if(attacker.energy <= 0):
-                self.gameObjects.remove(attacker)
-                World.worldMap.remove(attacker)
+                del self.gameObjects[defender]
+                World.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
                 return
             else:
                 return
         else:
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             if(attacker.energy <= 0):
-                self.gameObjects.remove(attacker)
-                World.worldMap.remove(attacker)
+                del self.gameObjects[defender]
+                World.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
                 return
             else:
                 return
