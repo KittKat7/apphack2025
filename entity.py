@@ -132,7 +132,7 @@ class Entity(GameObject):
                 else:
                     moveY = round(entities[closestEntity][1]/abs(entities[closestEntity][1])) #use abs to prevent -*-=+
                     
-            self.move(self, (discretizedNormalizedX, discretizedNormalizedY))    
+            self.move(self, (moveX, moveY))
                             
         elif gettingFood:
             # find closes entity
