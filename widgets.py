@@ -142,15 +142,15 @@ class EntityWidget(Widget):
         en.fill(c, special_flags=pg.BLEND_RGBA_MULT)
         screen.blit(en, (self.x, self.y)) # type: ignore
 
-        life = pg.transform.scale(EntityWidget.lifeImage, (self.width, self.height)) # type: ignore
-        life.set_alpha(128 * self.entity.lifespan) # type: ignore
-        screen.blit(life, (self.x, self.y))
+        # life = pg.transform.scale(EntityWidget.lifeImage, (self.width, self.height)) # type: ignore
+        # life.set_alpha(128 * self.entity.lifespan) # type: ignore
+        # screen.blit(life, (self.x, self.y))
 
-        perception = pg.transform.scale(EntityWidget.perceptionImage, (self.width, self.height)) # type: ignore
+        perception = pg.transform.scale(EntityWidget.lifeImage, (self.width, self.height)) # type: ignore
         perception.set_alpha(128 * self.entity.perception) # type: ignore
         screen.blit(perception, (self.x, self.y))
 
-        speed = pg.transform.scale(EntityWidget.speedImage, (self.width, self.height)) # type: ignore
+        speed = pg.transform.scale(EntityWidget.strongImage, (self.width, self.height)) # type: ignore
         speed.set_alpha(128 * self.entity.speed) # type: ignore
         screen.blit(speed, (self.x, self.y))
 
@@ -158,13 +158,13 @@ class EntityWidget(Widget):
         stamina.set_alpha(128 * self.entity.stamina) # type: ignore
         screen.blit(stamina, (self.x, self.y))
 
-        strong = pg.transform.scale(EntityWidget.strongImage, (self.width, self.height)) # type: ignore
-        strong.set_alpha(128 * self.entity.strength) # type: ignore
-        screen.blit(strong, (self.x, self.y))
+        # strong = pg.transform.scale(EntityWidget.strongImage, (self.width, self.height)) # type: ignore
+        # strong.set_alpha(128 * self.entity.strength) # type: ignore
+        # screen.blit(strong, (self.x, self.y))
 
-        tough = pg.transform.scale(EntityWidget.toughImage, (self.width, self.height)) # type: ignore
-        tough.set_alpha(128 * self.entity.toughness) # type: ignore
-        screen.blit(tough, (self.x, self.y))
+        # tough = pg.transform.scale(EntityWidget.toughImage, (self.width, self.height)) # type: ignore
+        # tough.set_alpha(128 * self.entity.toughness) # type: ignore
+        # screen.blit(tough, (self.x, self.y))
 
 class FoodWidget(Widget):
     foodImage: Union[pg.surface.Surface, None] = None
