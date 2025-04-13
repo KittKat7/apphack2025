@@ -53,7 +53,8 @@ class Entity(GameObject):
                     gameObjects.update({tmp:(i,j)})
                 else:
                     pass #don't care abt empty spaces
-                
+             
+        print(foods)
                 
         #Decide which of the following scenarios are happening
             #first priority is surviving so if you see something with strength greater than your toughness run
@@ -66,17 +67,17 @@ class Entity(GameObject):
         gettingFood:bool = False
         movingRandomly:bool = True #default action
         
-        for entity in entities:
-            if entity.strength > self.toughness: #run away
-                run = True
-                chase = False
-                gettingFood = False
-                movingRandomly = False
-                break #don't need to check anymore if running
-            elif entity.toughness < self.strength and not run:
-                chase = True 
-                gettingFood = False
-                movingRandomly = False
+        # for entity in entities:
+        #     if entity.strength > self.toughness: #run away
+        #         run = True
+        #         chase = False
+        #         gettingFood = False
+        #         movingRandomly = False
+        #         break #don't need to check anymore if running
+        #     elif entity.toughness < self.strength and not run:
+        #         chase = True 
+        #         gettingFood = False
+        #         movingRandomly = False
              
         if not run and not chase:  
             if len(foods) > 0: #entity can see food
@@ -161,6 +162,8 @@ class Entity(GameObject):
                 else:
                     moveY = round(foods[closestFood][1]/abs(foods[closestFood][1])) #use abs to prevent -*-=+
 
+                print(foods[closestFood])
+                print(moveX, moveY)
             self.move(self, (moveX, moveY))
                 
             
