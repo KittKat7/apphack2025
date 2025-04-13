@@ -3,7 +3,10 @@ if __name__ == "__main__":
     exit()
 
 from abc import ABC, abstractmethod
+from typing import Union
 import pygame as pg
+
+from gameobject import GameObject
 
 widgetFont: pg.font.Font
 
@@ -97,3 +100,34 @@ class Button(Widget):
             mouse = pg.mouse.get_pos()
             if self.isMouseHover():
                 self.onClickFunction()
+
+class EntityWidget(Widget):
+    def __init__(self, x: int, y: int, width: int, height: int, object: GameObject):
+        self.x = x
+        self.y = y
+        self.initWidth = width
+        self.width = width
+        self.initHeight = height
+        self.height = height
+        self.object = object
+
+    def render(self, screen, scale):
+
+        return super().render(screen, scale)
+
+class FoodWidget(Widget):
+    foodImage: Union[pg.surface.Surface, None]
+    def __init__(self, x: int, y: int, width: int, height: int):
+        self.x = x
+        self.y = y
+        self.initWidth = width
+        self.width = width
+        self.initHeight = height
+        self.height = height
+        if FoodWidget.foodImage == None:
+            FoodWidget.foodImage = pg.image.load("./assets/food.png").convert_alpha()
+
+    def render(self, screen, scale):
+        self.width = self.initWidth * scale
+        self.height = self.initHeight * scale
+        screen.blit(pg.transform.scale(FoodWidget.foodImage, (self.width, self.height)), (self.x, self.y)) # type: ignore

@@ -1,24 +1,28 @@
-from typing import Callable
+from typing import Callable, Union
 from gameobject import GameObject
 from gameobject import Food
 from entity import Entity
 import random
 
-DEFAULTWIDTH = 100
-DEFAULTHEIGHT = 100
+DEFAULTWIDTH = 25
+DEFAULTHEIGHT = 25
 
 class World:
 
-    worldMap: list[list[GameObject]]
     ENERGY_LOST: int = 10
+    FOOD_ENERGY: int = 10
 
     def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
+        self.worldMap: list[list[Union[GameObject, None]]] = []
         self.gameObjects: dict[GameObject, tuple[int, int]]
         self.width: int = width
         self.height: int = height
         self.foodGrowthRate: float
         self.foodQuality: int
         self.geneRandomness: float
+
+        for i in range(width):
+            self.worldMap.append([None] * height)
 
     def getWidth(self) -> int:
         return self.width
@@ -63,10 +67,10 @@ class World:
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             attacker.energy += defender.energy
             del self.gameObjects[defender]
-            World.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]]
+            self.worldMap[self.gameObjects[defender][0]][self.gameObjects[defender][1]]
             if(attacker.energy <= 0):
                 del self.gameObjects[defender]
-                World.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
+                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
                 return
             else:
                 return
@@ -74,24 +78,25 @@ class World:
             attacker.energy -= attacker.strength * World.ENERGY_LOST
             if(attacker.energy <= 0):
                 del self.gameObjects[defender]
-                World.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
+                self.worldMap[self.gameObjects[attacker][0]][self.gameObjects[attacker][1]]
                 return
             else:
                 return
     
     def handleMove(self, ent: Entity, pos: tuple[int, int]) -> None:
-        if(World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
+        # For consuming food
+        if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] is Food):
+            self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = None
+            ent.energy += World.FOOD_ENERGY
+        # Move entity
+        if(self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] == None):
             self.gameObjects[ent] = (self.gameObjects[ent][0] + pos[0], self.gameObjects[ent][1] + pos[1])
-            World.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = ent
+            self.worldMap[self.gameObjects[ent][0]][self.gameObjects[ent][1]] = ent
         else:
-            objAtLocation = World.worldMap[self.gameObjects[ent][0] + pos[0]][self.gameObjects[ent][1] + pos[1]]
+            objAtLocation = self.worldMap[self.gameObjects[ent][0] + pos[0]][self.gameObjects[ent][1] + pos[1]]
             if(isinstance(objAtLocation, Entity)):    
                 self.handleAttack(ent, objAtLocation)
-                return
-            elif(isinstance(objAtLocation, Food)):
-                #consume food
                 return
             else:
                 #???
                 return
-    
