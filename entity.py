@@ -71,15 +71,30 @@ class Entity(GameObject):
                 movingRandomly = False
                     
         if not run and not chase and not gettingFood: #redundant check 
-            movingRandomly = True                    
+            movingRandomly = True     
             
+        
+        moveX:int = 0
+        moveY:int = 0
         #do actions based on what was decided
         if run:
-            pass #TODO
+            hostileEntities: int = 0
+            
+            for entity in entities:
+                if entity.strength > self.toughness:
+                    moveX = moveX - entities[entity][0] #negative because moving away
+                    moveY = moveY - entities[entity][1] #negative because moving away
+                    hostileEntities = hostileEntities + 1
+            
+            moveXavg = round(moveX/hostileEntities)
+            moveYavg = round(moveY/hostileEntities)
+            
+           
+            
+
         elif chase:
             pass #TODO
         elif gettingFood:
             pass #TODO
         else: #moves randomly
-            pass
-        
+            pass #TODO
