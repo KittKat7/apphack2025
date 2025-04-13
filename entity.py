@@ -1,5 +1,6 @@
 from gameobject import GameObject
 from gameobject import Food
+import math
 
 class Entity(GameObject):
     maxPerception:int = 5
@@ -89,10 +90,16 @@ class Entity(GameObject):
                     moveY = moveY - entities[entity][1] #negative because moving away
                     hostileEntities = hostileEntities + 1
             
-            moveXavg = round((moveX/hostileEntities)*self.speed + self.maxTileMovement*self.speed)
-            moveYavg = round((moveY/hostileEntities)*self.speed + self.maxTileMovement*self.speed)        
+            moveXavg = moveX/hostileEntities
+            moveYavg = moveY/hostileEntities
+                        
+            normalizedX = moveXavg/abs(moveXavg) #use abs to prevent -*-=+
+            normalizedY = moveYavg/abs(moveXavg) #use abs to prevent -*-=+
             
-            self.move(self, (moveXavg, moveYavg))    
+            discretizedNormalizedX = round(normalizedX)
+            discretizedNormalizedY = round(normalizedY)
+            
+            self.move(self, (discretizedNormalizedX, discretizedNormalizedY))    
 
         elif chase:
             # find closes entity
@@ -101,10 +108,16 @@ class Entity(GameObject):
                 if closestEntity is None or (entities[entity][0] + entities[entity][1]) < (entities[closestEntity][0] + entities[closestEntity][1]):
                     closestEntity = entity
             
-            if closestEntity is not None: #should always be the case
-                moveX = round(entities[closestEntity][0])
-                moveY = round(entities[closestEntity][0])
+            #if in the 8 adjecent tiles then attack
+            if closestEntity is not None and entities[closestEntity][0] <= 1 and entities[closestEntity][0] >= -1 and entities[closestEntity][1] <= 1 and entities[closestEntity][1] >= -1:
+                self.attack(self, closestEntity)
             
+            #move toward stuff
+            if closestEntity is not None: #should always be the case
+                moveX = round(entities[closestEntity][0]/abs(entities[closestEntity][0])) #use abs to prevent -*-=+
+                moveY = round(entities[closestEntity][1]/abs(entities[closestEntity][1])) #use abs to prevent -*-=+
+                self.move(self, (moveX, moveY))
+                            
         elif gettingFood:
             pass #TODO
         else: #moves randomly
