@@ -1,5 +1,6 @@
 from gameobject import GameObject
 from gameobject import Food
+import random
 import math
 
 class Entity(GameObject):
@@ -121,4 +122,32 @@ class Entity(GameObject):
         elif gettingFood:
             pass #TODO
         else: #moves randomly
+            direction: int = random.randint(1, 8)
+            if(direction == 1):
+                #move north
+                self.move(self, (0, 1))
+            elif(direction == 2):
+                #move northeast
+                self.move(self, (1, 1))
+            elif(direction == 3):
+                #move east
+                self.move(self, (1, 0))
+            elif(direction == 4):
+                #move southeast
+                self.move(self, (1, -1))
+            elif(direction == 5):
+                #move south
+                self.move(self, (0, -1))
+            elif(direction == 6):
+                #move southwest
+                self.move(self, (-1, -1))
+            elif(direction == 7):
+                #move west
+                self.move(self, (-1, 0))
+            elif(direction == 8):
+                #move northwest
+                self.move(self, (-1, 1))
+            else:
+                #should never reach
+                return
             pass #TODO
