@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from typing import Union
 import pygame as pg
 
+from entity import Entity
 from gameobject import GameObject
 
 widgetFont: pg.font.Font
@@ -102,21 +103,64 @@ class Button(Widget):
                 self.onClickFunction()
 
 class EntityWidget(Widget):
-    def __init__(self, x: int, y: int, width: int, height: int, object: GameObject):
+
+    entityImage = None
+    lifeImage = None
+    perceptionImage = None
+    speedImage = None
+    staminaImage = None
+    strongImage = None
+    toughImage = None
+
+    def __init__(self, x: int, y: int, width: int, height: int, entity: Entity):
         self.x = x
         self.y = y
         self.initWidth = width
         self.width = width
         self.initHeight = height
         self.height = height
-        self.object = object
+        self.entity = entity
+        if EntityWidget.entityImage == None:
+            EntityWidget.entityImage = pg.image.load("./assets/entity_base.png").convert_alpha()
+            EntityWidget.lifeImage = pg.image.load("./assets/entity_life.png").convert_alpha()
+            EntityWidget.perceptionImage = pg.image.load("./assets/entity_perception.png").convert_alpha()
+            EntityWidget.speedImage = pg.image.load("./assets/entity_speed.png").convert_alpha()
+            EntityWidget.staminaImage = pg.image.load("./assets/entity_stamina.png").convert_alpha()
+            EntityWidget.strongImage = pg.image.load("./assets/entity_strong.png").convert_alpha()
+            EntityWidget.toughImage = pg.image.load("./assets/entity_tough.png").convert_alpha()
 
     def render(self, screen, scale):
+        self.width = self.initWidth * scale
+        self.height = self.initHeight * scale
+# image.set_alpha(128)
+        screen.blit(pg.transform.scale(EntityWidget.entityImage, (self.width, self.height)), (self.x, self.y)) # type: ignore
 
-        return super().render(screen, scale)
+        life = pg.transform.scale(EntityWidget.lifeImage, (self.width, self.height)) # type: ignore
+        life.set_alpha(128 * self.entity.lifespan) # type: ignore
+        screen.blit(life, (self.x, self.y))
+
+        perception = pg.transform.scale(EntityWidget.perceptionImage, (self.width, self.height)) # type: ignore
+        perception.set_alpha(128 * self.entity.perception) # type: ignore
+        screen.blit(perception, (self.x, self.y))
+
+        speed = pg.transform.scale(EntityWidget.speedImage, (self.width, self.height)) # type: ignore
+        speed.set_alpha(128 * self.entity.speed) # type: ignore
+        screen.blit(speed, (self.x, self.y))
+
+        stamina = pg.transform.scale(EntityWidget.staminaImage, (self.width, self.height)) # type: ignore
+        stamina.set_alpha(128 * self.entity.stamina) # type: ignore
+        screen.blit(stamina, (self.x, self.y))
+
+        strong = pg.transform.scale(EntityWidget.strongImage, (self.width, self.height)) # type: ignore
+        strong.set_alpha(128 * self.entity.strength) # type: ignore
+        screen.blit(strong, (self.x, self.y))
+
+        tough = pg.transform.scale(EntityWidget.toughImage, (self.width, self.height)) # type: ignore
+        tough.set_alpha(128 * self.entity.toughness) # type: ignore
+        screen.blit(tough, (self.x, self.y))
 
 class FoodWidget(Widget):
-    foodImage: Union[pg.surface.Surface, None]
+    foodImage: Union[pg.surface.Surface, None] = None
     def __init__(self, x: int, y: int, width: int, height: int):
         self.x = x
         self.y = y

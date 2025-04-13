@@ -5,6 +5,7 @@ if __name__ == "__main__":
 import pygame as pg
 
 from gameobject import Food, GameObject
+import gameobject
 from widgets import *
 from world import World
 
@@ -116,7 +117,7 @@ class SimScreen(Screen):
 
     def render(self, screen, scale):
         w, h = pg.display.get_surface().get_size()
-        scalew: float = (w * 0.8) / self.worldW
+        scalew: float = (w) / self.worldW
         scaleh: float = h / self.worldH
         scaleTile: float = scalew
         if scaleh < scalew:
@@ -125,7 +126,7 @@ class SimScreen(Screen):
         drawW = scaleTile * self.worldW
         drawH = scaleTile * self.worldH
 
-        startx = w * 0.8 / 2 - drawW / 2
+        startx = w / 2 - drawW / 2
         starty = h / 2 - drawW / 2
 
         screen.fill('#000000')
@@ -144,11 +145,15 @@ class SimScreen(Screen):
                     scaleTile - 2 * scale,
                     scaleTile - 2 * scale])
             
-                if self.world.worldMap[i][j] is GameObject:
-                    if self.world.worldMap[i][j] is Food:
-                        FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile)).render(screen, scale)
+                if isinstance(self.world.worldMap[i][j], GameObject):
+                    if isinstance(self.world.worldMap[i][j], Food):
+                        f = FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile))
+                        f.render(screen, 1)
+                    elif isinstance(self.world.worldMap[i][j], Entity):
+                        e = EntityWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), self.world.worldMap[i][j]) # type: ignore
+                        e.render(screen, 1)
 
 
-        pg.draw.rect(screen, '#AAAAAA', [w - w * 0.20, 0, w * 0.20, h])
+        # pg.draw.rect(screen, '#AAAAAA', [w - w * 0.20, 0, w * 0.20, h])
 
 
