@@ -24,6 +24,10 @@ class World:
         self.foodQuality: int
         self.geneRandomness: float
 
+        Entity.perceiveCallback = self.handlePerceive
+        Entity.moveCallback = self.handleMove
+        Entity.attackCallback = self.handleAttack
+
         self.running = True
 
         for i in range(width):
@@ -33,7 +37,7 @@ class World:
             x = random.randrange(0, self.width, 1)
             y = random.randrange(0, self.height, 1)
             if self.worldMap[x][y] == None:
-                e = Entity(random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random() * World.MAX_ENERGY, self.percieve, self.handleAttack, self.handleMove)
+                e = Entity(random.random(), random.random(), random.random(), random.random(), random.random(), random.random(), random.random() * World.MAX_ENERGY)
                 self.worldMap[x][y] = e
                 self.gameObjects[e] = (x, y)
         self.genFood()
@@ -82,7 +86,7 @@ class World:
                         continue
                     g = self.worldMap[x + i - 1][y + j - 1]
                     if g == None:
-                        self.worldMap[x + i - 1][y + j -1] = Entity(entity.speed, entity.stamina, entity.perception, entity.toughness, entity.toughness, entity.lifespan, 20, entity.perceive, entity.attack, entity.move)
+                        self.worldMap[x + i - 1][y + j -1] = Entity(entity.speed, entity.stamina, entity.perception, entity.toughness, entity.toughness, entity.lifespan, 20)
                         self.worldMap[x + i - 1][y + j -1].rand() # type: ignore
                         self.gameObjects[self.worldMap[x + i - 1][y + j - 1]] = (x + i - 1, y + j - 1) # type: ignore
                         return
@@ -114,8 +118,8 @@ class World:
     def setGeneRandomness(self, val: float) -> None:
         self.geneRandomness = val
     
-    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float, percieve: Callable[[], list[list[GameObject]]], attack: Callable[[Entity, Entity], None], move: Callable[[Entity, tuple[int, int]], None]) -> Entity:
-        return Entity(speed, stamina, perception, strength, toughness, lifespan, energy, percieve, attack, move)
+    def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float) -> Entity:
+        return Entity(speed, stamina, perception, strength, toughness, lifespan, energy)
     
     def makeFood(self) -> Food:
         return Food()
@@ -176,7 +180,7 @@ class World:
                 #???
                 return
             
-    def percieve(self, entity: Entity) -> list[list[GameObject]]:
+    def handlePerceive(self, entity: Entity) -> list[list[GameObject]]:
         x, y = self.gameObjects[entity]
         r = int(round(Entity.maxPerception * (entity.perception + 1)))
 

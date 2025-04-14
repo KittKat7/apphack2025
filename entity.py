@@ -1,14 +1,25 @@
+from __future__ import annotations
+from typing import Callable
 from gameobject import GameObject
 from gameobject import Food
 import random
 import math
 import time
 
+if __name__ == "__main__":
+    import main
+    exit()
+
 class Entity(GameObject):
+
+    perceiveCallback: Callable[[Entity], list[list[GameObject]]]
+    moveCallback: Callable[[Entity, tuple[int, int]], None]
+    attackCallback: Callable[[Entity, Entity], None]
+
     maxPerception:int = 5
     maxTileMovement:int = 3
     
-    def __init__(self, speed:float, stamina:float, perception:float, strength:float, toughness:float, lifespan:float, energy:float, perceive, attack, move) -> None:
+    def __init__(self, speed:float, stamina:float, perception:float, strength:float, toughness:float, lifespan:float, energy:float) -> None:
         self.speed: float = speed
         self.stamina: float = stamina
         self.perception: float = perception # used by world to figure out the return function
@@ -16,9 +27,6 @@ class Entity(GameObject):
         self.toughness: float = toughness
         self.lifespan: float = lifespan
         self.energy: float = energy#main balancing factor of sim, start off with full energy
-        self.perceive = perceive
-        self.attack = attack
-        self.move = move
 
     def rand(self):
         self.speed += (random.randrange(-10, 10, 1) / 100)
@@ -29,7 +37,7 @@ class Entity(GameObject):
         self.lifespan += (random.randrange(-10, 10, 1) / 100)
         
     def think(self):
-        observableWorld:list[list[GameObject]] = self.perceive(self)
+        observableWorld:list[list[GameObject]] = Entity.perceiveCallback(self)
         
         #look for things nearby
         entities:dict[Entity, tuple[int,int]] = dict()
@@ -116,7 +124,7 @@ class Entity(GameObject):
             discretizedNormalizedX = round(normalizedX)
             discretizedNormalizedY = round(normalizedY)
             
-            self.move(self, (discretizedNormalizedX, discretizedNormalizedY))    
+            Entity.moveCallback(self, (discretizedNormalizedX, discretizedNormalizedY))    
 
         elif chase:
             # find closes entity
@@ -141,7 +149,7 @@ class Entity(GameObject):
                 else:
                     moveY = round(entities[closestEntity][1]/abs(entities[closestEntity][1])) #use abs to prevent -*-=+
                     
-            self.move(self, (moveX, moveY))
+            Entity.moveCallback(self, (moveX, moveY))
                             
         elif gettingFood:
             # find closes entity
@@ -168,7 +176,7 @@ class Entity(GameObject):
                     else:
                         moveY = 1
 
-            self.move(self, (moveX, moveY))
+            Entity.moveCallback(self, (moveX, moveY))
             return
                 
             
@@ -176,28 +184,28 @@ class Entity(GameObject):
             direction: int = random.randint(1, 8)
             if(direction == 1):
                 #move north
-                self.move(self, (0, 1))
+                Entity.moveCallback(self, (0, 1))
             elif(direction == 2):
                 #move northeast
-                self.move(self, (1, 1))
+                Entity.moveCallback(self, (1, 1))
             elif(direction == 3):
                 #move east
-                self.move(self, (1, 0))
+                Entity.moveCallback(self, (1, 0))
             elif(direction == 4):
                 #move southeast
-                self.move(self, (1, -1))
+                Entity.moveCallback(self, (1, -1))
             elif(direction == 5):
                 #move south
-                self.move(self, (0, -1))
+                Entity.moveCallback(self, (0, -1))
             elif(direction == 6):
                 #move southwest
-                self.move(self, (-1, -1))
+                Entity.moveCallback(self, (-1, -1))
             elif(direction == 7):
                 #move west
-                self.move(self, (-1, 0))
+                Entity.moveCallback(self, (-1, 0))
             elif(direction == 8):
                 #move northwest
-                self.move(self, (-1, 1))
+                Entity.moveCallback(self, (-1, 1))
             else:
                 #should never reach
                 return
