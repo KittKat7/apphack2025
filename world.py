@@ -7,6 +7,7 @@ import time
 
 DEFAULTWIDTH = 15
 DEFAULTHEIGHT = 15
+SIM_SPEED = 0.1
 
 class World:
 
@@ -56,7 +57,7 @@ class World:
                     if e.energy > 25:
                         self.reproduce(e)
                         e.energy -= 20
-                    time.sleep(0.01)
+                    time.sleep(SIM_SPEED)
                 if e.energy <= 0:
                     self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
                     self.gameObjects.pop(e)
@@ -82,7 +83,7 @@ class World:
                     g = self.worldMap[x + i - 1][y + j - 1]
                     if g == None:
                         self.worldMap[x + i - 1][y + j -1] = Entity(entity.speed, entity.stamina, entity.perception, entity.toughness, entity.toughness, entity.lifespan, 20, entity.perceive, entity.attack, entity.move)
-                        self.worldMap[x + i - 1][y + j -1].rand()
+                        self.worldMap[x + i - 1][y + j -1].rand() # type: ignore
                         self.gameObjects[self.worldMap[x + i - 1][y + j - 1]] = (x + i - 1, y + j - 1) # type: ignore
                         return
                 except:
