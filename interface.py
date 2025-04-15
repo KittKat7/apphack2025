@@ -173,8 +173,9 @@ class SimScreen(Screen):
                         fobject: Food = gobject
                         f = FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), fobject.type)
                         f.render(screen, 1)
-                    elif isinstance(self.world.worldMap[i][j], Entity):
-                        e = EntityWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), self.world.worldMap[i][j]) # type: ignore
+                    elif isinstance(gobject, Entity):
+                        eobject: Entity = gobject
+                        e = EntityWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), gobject) # type: ignore
                         e.render(screen, 1)
 
         pg.draw.rect(screen, '#777777', [w - w * 0.20, starty, w * 0.20, drawH])
