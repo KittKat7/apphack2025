@@ -140,7 +140,7 @@ class SimScreen(Screen):
 
     def render(self, screen, scale):
         w, h = pg.display.get_surface().get_size()
-        scalew: float = (w) / self.worldW
+        scalew: float = (w * 0.8) / self.worldW
         scaleh: float = h / self.worldH
         scaleTile: float = scalew
         if scaleh < scalew:
@@ -149,7 +149,7 @@ class SimScreen(Screen):
         drawW = scaleTile * self.worldW
         drawH = scaleTile * self.worldH
 
-        startx = w / 2 - drawW / 2
+        startx = (w * 0.8) / 2 - drawW / 2
         starty = h / 2 - drawW / 2
 
         screen.fill('#000000')
@@ -179,6 +179,6 @@ class SimScreen(Screen):
                         e.render(screen, 1)
 
 
-        # pg.draw.rect(screen, '#AAAAAA', [w - w * 0.20, 0, w * 0.20, h])
+        pg.draw.rect(screen, '#777777', [w - w * 0.20, starty, w * 0.20, drawH])
 
 
