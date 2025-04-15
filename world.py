@@ -35,6 +35,7 @@ class World:
         Entity.attackCallback = self.handleAttack
 
         self.running = True
+        self.paused = False
 
         for i in range(width):
             self.worldMap.append([None] * height)
@@ -51,6 +52,9 @@ class World:
 
     def run(self):
         while self.running:
+            if self.paused:
+                time.sleep(1)
+                continue
             entities = list(self.gameObjects.keys())
             if len(entities) == 0:
                 self.running = False

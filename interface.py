@@ -82,16 +82,17 @@ class Screen:
         """
         """
         self.display: Display = display
-        self.widgets = list[Widget]
+        self.widgets: list[Widget] = []
 
     @abstractmethod
     def render(self, screen, scale):
         pass
 
-    @abstractmethod
     def event(self, event):
-        pass
-    
+        if event.type == pg.MOUSEBUTTONDOWN:
+            mouse = pg.mouse.get_pos()
+        for w in self.widgets:
+            w.event(event)
 
 class MenuScreen(Screen):
     def __init__(self, display: Display) -> None:
@@ -115,12 +116,6 @@ class MenuScreen(Screen):
         self.quitButton.y = int(h / 8 * (8-2) - self.quitButton.height / 2)
         self.quitButton.render(screen, scale)
 
-    def event(self, event):
-        if event.type == pg.MOUSEBUTTONDOWN:
-            mouse = pg.mouse.get_pos()
-            for w in self.widgets:
-                w.event(event)
-    
     def startGame(self):
         world: World = World()
         self.display.setScreen(SimScreen(self.display, world))
@@ -137,6 +132,10 @@ class SimScreen(Screen):
         self.world: World = world
         self.worldW: int = world.getWidth()
         self.worldH: int = world.getHeight()
+        self.menuText: Text = Text(0, 0, 0, 0, None, "EVO SIM")
+        self.pauseButton: Button = Button(0, 0, 5, 1, self.pauseSim, buttonText="PAUSE")
+        self.quitButton: Button = Button(0, 0, 5, 1, display.close, buttonText="QUIT")
+        self.widgets: list[Widget] = [self.menuText, self.pauseButton, self.quitButton]
 
     def render(self, screen, scale):
         w, h = pg.display.get_surface().get_size()
@@ -178,7 +177,35 @@ class SimScreen(Screen):
                         e = EntityWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), self.world.worldMap[i][j]) # type: ignore
                         e.render(screen, 1)
 
-
         pg.draw.rect(screen, '#777777', [w - w * 0.20, starty, w * 0.20, drawH])
+
+        vertPad = w * 0.2 / 10
+
+        self.menuText.initWidth = int(w * 0.20)
+        self.menuText.initHeight = int(self.menuText.initWidth / 5)
+        self.menuText.x = int(w - w * 0.1 - self.menuText.width / 2)
+        self.menuText.y = int(starty + vertPad)
+        self.menuText.render(screen, 1)
+
+        self.pauseButton.initWidth = int(w * 0.20)
+        self.pauseButton.initHeight = int(self.pauseButton.initWidth / 5)
+        self.pauseButton.x = int(w - w * 0.1 - self.pauseButton.width / 2)
+        self.pauseButton.y = int(self.menuText.y + self.menuText.height + vertPad)
+        self.pauseButton.render(screen, 1)
+    
+        self.quitButton.initWidth = int(w * 0.20)
+        self.quitButton.initHeight = int(self.quitButton.initWidth / 5)
+        self.quitButton.x = int(w - w * 0.1 - self.quitButton.width / 2)
+        self.quitButton.y = int(self.pauseButton.y + self.pauseButton.height + vertPad)
+        self.quitButton.render(screen, 1)
+
+    def pauseSim(self):
+        self.world.paused = not self.world.paused
+        if self.world.paused:
+            self.pauseButton.text.text = "RESUME"
+        else:
+            self.pauseButton.text.text = "PAUSE"
+
+
 
 
