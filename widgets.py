@@ -3,7 +3,7 @@ if __name__ == "__main__":
     exit()
 
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Tuple, Union
 import pygame as pg
 
 from entity import Entity
@@ -135,8 +135,8 @@ class EntityWidget(Widget):
         self.height = self.initHeight * scale
         en = pg.transform.scale(EntityWidget.entityImage, (self.width, self.height)) # type: ignore
         r = 0
-        g = max(min(int(255 * 0.2 * (self.entity.energy/World.MAX_ENERGY)), 255), 0)
-        b = max(min(int(255 * 0.9 * (self.entity.energy/World.MAX_ENERGY)), 255), 0)
+        g = max(min(int(200 * 0.2 * (self.entity.energy/World.MAX_ENERGY) + 55), 255), 0)
+        b = max(min(int(200 * 0.9 * (self.entity.energy/World.MAX_ENERGY) + 55), 255), 0)
         c = pg.Color(r, g, b)
 
         en.fill(c, special_flags=pg.BLEND_RGBA_MULT)
@@ -167,18 +167,21 @@ class EntityWidget(Widget):
         # screen.blit(tough, (self.x, self.y))
 
 class FoodWidget(Widget):
-    foodImage: Union[pg.surface.Surface, None] = None
-    def __init__(self, x: int, y: int, width: int, height: int):
+    foodImages: Union[Tuple[pg.surface.Surface, pg.surface.Surface], None] = None
+    def __init__(self, x: int, y: int, width: int, height: int, ftype: int):
         self.x = x
         self.y = y
         self.initWidth = width
         self.width = width
         self.initHeight = height
         self.height = height
-        if FoodWidget.foodImage == None:
-            FoodWidget.foodImage = pg.image.load("./assets/food.png").convert_alpha()
+        self.ftype: int = ftype
+        if FoodWidget.foodImages == None:
+            FoodWidget.foodImages = (
+                pg.image.load("./assets/food.png").convert_alpha(),
+                pg.image.load("./assets/food_entity.png").convert_alpha())
 
     def render(self, screen, scale):
         self.width = self.initWidth * scale
         self.height = self.initHeight * scale
-        screen.blit(pg.transform.scale(FoodWidget.foodImage, (self.width, self.height)), (self.x, self.y)) # type: ignore
+        screen.blit(pg.transform.scale(FoodWidget.foodImages[self.ftype], (self.width, self.height)), (self.x, self.y)) # type: ignore

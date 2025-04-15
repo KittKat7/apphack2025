@@ -168,9 +168,11 @@ class SimScreen(Screen):
                     scaleTile - 2 * scale,
                     scaleTile - 2 * scale])
             
-                if isinstance(self.world.worldMap[i][j], GameObject):
-                    if isinstance(self.world.worldMap[i][j], Food):
-                        f = FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile))
+                gobject: GameObject | None = self.world.worldMap[i][j]
+                if isinstance(gobject, GameObject):
+                    if isinstance(gobject, Food):
+                        fobject: Food = gobject
+                        f = FoodWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), fobject.type)
                         f.render(screen, 1)
                     elif isinstance(self.world.worldMap[i][j], Entity):
                         e = EntityWidget(int(i * scaleTile + startx), int(j * scaleTile + starty), int(scaleTile), int(scaleTile), self.world.worldMap[i][j]) # type: ignore

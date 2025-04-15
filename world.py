@@ -69,7 +69,7 @@ class World:
                         e.energy -= 20
                     time.sleep(SIM_SPEED)
                 if e.energy <= 0:
-                    self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food()
+                    self.worldMap[self.gameObjects[e][0]][self.gameObjects[e][1]] = Food(Food.ENTITY)
                     self.gameObjects.pop(e)
             self.genFood()
 
@@ -78,7 +78,7 @@ class World:
             x = random.randrange(0, self.width, 1)
             y = random.randrange(0, self.height, 1)
             if self.worldMap[x][y] == None:
-                self.worldMap[x][y] = Food()
+                self.worldMap[x][y] = Food(Food.NORMAL)
             elif isinstance(self.worldMap[x][y], Entity):
                 # self.worldMap[x][y].energy += World.FOOD_ENERGY # type: ignore
                 continue
@@ -127,9 +127,6 @@ class World:
     def makeEntity(self, speed: float, stamina: float, perception: float, strength: float, toughness: float, lifespan: float, energy: float) -> Entity:
         return Entity(speed, stamina, perception, strength, toughness, lifespan, energy)
     
-    def makeFood(self) -> Food:
-        return Food()
-
     def getGameObjectPos(self, obj: GameObject) -> tuple[int, int] | None:
         if(self.gameObjects.get(obj) != None):
             return self.gameObjects.get(obj)
