@@ -2,7 +2,13 @@ if __name__ == "__main__":
     import main
     exit()
 
-import pygame as pg
+import contextlib
+with contextlib.redirect_stdout(None):
+    try:
+        import pygame as pg
+    except:
+        print("ERR: PyGame is not installed!!!")
+        quit()
 import threading
 
 from gameobject import Food, GameObject
@@ -41,8 +47,7 @@ class Display:
         while True:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
-                    quit()
+                    self.close()
                 else:
                     self.screen.event(event)
                 
@@ -61,6 +66,15 @@ class Display:
 
     def setScreen(self, screen) -> None:
         self.screen = screen
+
+    def close(self):
+        if hasattr(World, 'activeWorld'):
+            World.activeWorld.running = False
+            World.activeWorld.worldThread.join()
+        pg.quit()
+        print("Exiting...")
+        quit()
+
 
         
 class Screen:
@@ -85,7 +99,7 @@ class MenuScreen(Screen):
         """
         self.titleText = Text(0, 0, 0, 0, None, "EVO SIM")
         self.startButton = Button(0, 0, 500, 100, self.startGame, buttonText="START")
-        self.quitButton = Button(0, 0, 500, 100, quit, buttonText="QUIT")
+        self.quitButton = Button(0, 0, 500, 100, display.close, buttonText="QUIT")
         self.widgets = [self.titleText, self.startButton, self.quitButton]
         self.display = display
     
@@ -111,6 +125,7 @@ class MenuScreen(Screen):
         world: World = World()
         self.display.setScreen(SimScreen(self.display, world))
         t = threading.Thread(target=world.run)
+        World.activeWorld.worldThread = t
         t.start()
 
 class SimSettingScreen(Screen):

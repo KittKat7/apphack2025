@@ -1,3 +1,5 @@
+from __future__ import annotations
+from threading import Thread
 from typing import Callable, Union
 from gameobject import GameObject
 from gameobject import Food
@@ -15,7 +17,10 @@ class World:
     FOOD_ENERGY: int = 7
     MAX_ENERGY: int = 30
 
+    activeWorld: World
+
     def __init__(self, width=DEFAULTWIDTH, height=DEFAULTHEIGHT) -> None:
+        World.activeWorld = self
         self.worldMap: list[list[Union[GameObject, None]]] = []
         self.gameObjects: dict[GameObject, tuple[int, int]] = {}
         self.width: int = width
@@ -23,6 +28,7 @@ class World:
         self.foodGrowthRate: float = 3
         self.foodQuality: int
         self.geneRandomness: float
+        self.worldThread: Thread
 
         Entity.perceiveCallback = self.handlePerceive
         Entity.moveCallback = self.handleMove
