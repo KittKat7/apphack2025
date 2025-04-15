@@ -29,6 +29,7 @@ class World:
         self.foodQuality: int
         self.geneRandomness: float
         self.worldThread: Thread
+        self.worldDay: int = 0
 
         Entity.perceiveCallback = self.handlePerceive
         Entity.moveCallback = self.handleMove
@@ -55,6 +56,7 @@ class World:
             if self.paused:
                 time.sleep(1)
                 continue
+            self.worldDay += 1
             entities = list(self.gameObjects.keys())
             if len(entities) == 0:
                 self.running = False

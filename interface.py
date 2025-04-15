@@ -33,7 +33,7 @@ class Display:
         """
         pg.init()
         pg.font.init()
-        Widget.setFont(pg.font.Font("./assets/game-paused-demo/Game Paused DEMO.otf", 50))
+        Widget.setFont(pg.font.Font("./assets/Avenixel/Avenixel-Regular.ttf", 50))
         self.pgscreen: pg.Surface = pg.display.set_mode((0, 0), pg.RESIZABLE)
         pg.display.set_caption("EVO SIM")
         self.clock: pg.Clock = pg.time.Clock() # type: ignore
@@ -133,7 +133,7 @@ class SimScreen(Screen):
         self.world: World = world
         self.worldW: int = world.getWidth()
         self.worldH: int = world.getHeight()
-        self.menuText: Text = Text(0, 0, 0, 0, None, "EVO SIM")
+        self.menuText: Text = Text(0, 0, 0, 0, None, "EVO SIM " + str(self.world.worldDay))
         self.pauseButton: Button = Button(0, 0, 5, 1, self.pauseSim, buttonText="PAUSE")
         self.menuButton: Button = Button(0, 0, 5, 1, self.endSim, buttonText="MENU")
         self.quitButton: Button = Button(0, 0, 5, 1, display.close, buttonText="QUIT")
@@ -184,6 +184,7 @@ class SimScreen(Screen):
 
         vertPad = w * 0.2 / 10
 
+        self.menuText.text = "EVO SIM {0}".format(self.world.worldDay)
         self.menuText.initWidth = int(w * 0.20)
         self.menuText.initHeight = int(self.menuText.initWidth / 5)
         self.menuText.x = int(w - w * 0.1 - self.menuText.width / 2)
